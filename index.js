@@ -1,7 +1,7 @@
 
 
 
-import * as AuroraIMUIController from "./src/main/ui/UI.js"
+import * as AuroraIMUIController from "./src/main/ui/UI"
 import * as UICommon from "./src/main/ui/Common.js"
 
 import * as ChatInput from './src/main/ui/native/chatinput.js';

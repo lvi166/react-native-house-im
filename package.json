@@ -9,7 +9,8 @@
     "android",
     "index.js",
     "ios",
-    "react-native-house-im.podspec"
+    "react-native-house-im.podspec",
+    "src"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
