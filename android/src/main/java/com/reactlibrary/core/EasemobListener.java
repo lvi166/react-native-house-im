@@ -1,0 +1,277 @@
+package com.reactlibrary.core;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
+import com.hyphenate.EMClientListener;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMConversationListener;
+import com.hyphenate.EMError;
+import com.hyphenate.EMGroupChangeListener;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMMultiDeviceListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMucSharedFile;
+import com.hyphenate.chat.adapter.EMAGroup;
+
+import java.util.List;
+
+
+/**
+ * 处理环信的监听事件
+ * Created by kevin.bai on 2018/7/30.
+ */
+public class EasemobListener implements EMGroupChangeListener, EMMessageListener, EMConversationListener,
+        EMConnectionListener, EMMultiDeviceListener, EMClientListener, EMContactListener {
+    private final Context mContext;
+
+    EasemobListener(Context context) {
+        mContext = context;
+    }
+
+    /******************** ConnectionListener ********************/
+
+    @Override
+    public void onConnected() {
+        EMClient.getInstance().groupManager().loadAllGroups();
+        EMClient.getInstance().chatManager().loadAllConversations();
+        EasemobHelper.getInstance()
+                .sendEvent(IMConstant.CLIENT_DELEGATE, IMConstant.CONNECTION_STATE_DID_CHANGE, IMConstant.ConnectionState.CONNECTED);
+    }
+
+    @Override
+    public void onDisconnected(int error) {
+        if (error == EMError.USER_REMOVED) {
+            // 显示帐号已经被移除
+            EasemobHelper.getInstance().sendEvent(IMConstant.CLIENT_DELEGATE, IMConstant.USER_ACCOUNT_DID_REMOVE_FROM_SERVER);
+        } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+            // 显示帐号在其他设备登录
+            EasemobHelper.getInstance().sendEvent(IMConstant.CLIENT_DELEGATE, IMConstant.USER_ACCOUNT_DID_LOGIN_FROM_OTHER_DEVICE);
+        } else {
+            EasemobHelper.getInstance()
+                    .sendEvent(IMConstant.CLIENT_DELEGATE, IMConstant.CONNECTION_STATE_DID_CHANGE, IMConstant.ConnectionState.DISCONNEDTED);
+//            if (NetUtils.hasNetwork(mContext)) {
+//                //连接不到聊天服务器
+//            } else {
+//                //当前网络不可用，请检查网络设置
+//            }
+        }
+    }
+
+    /******************** ConversationListener ********************/
+    @Override
+    public void onCoversationUpdate() {
+        EasemobHelper.getInstance().sendEvent(IMConstant.CHAT_MANAGER_DELEGATE, IMConstant. CONVERSATION_LIST_DID_UPDATE);
+    }
+
+    /******************** GroupListener ********************/
+
+    @Override
+    public void onInvitationReceived(String s, String s1, String s2, String s3) {
+
+    }
+
+    @Override
+    public void onRequestToJoinReceived(String s, String s1, String s2, String s3) {
+
+    }
+
+    @Override
+    public void onRequestToJoinAccepted(String s, String s1, String s2) {
+
+    }
+
+    @Override
+    public void onRequestToJoinDeclined(String s, String s1, String s2, String s3) {
+
+    }
+
+    @Override
+    public void onInvitationAccepted(String s, String s1, String s2) {
+
+    }
+
+    @Override
+    public void onInvitationDeclined(String s, String s1, String s2) {
+
+    }
+
+    @Override
+    public void onUserRemoved(String s, String s1) {
+        sendLeaveGroupEvent(s, s1);
+    }
+
+    private void sendLeaveGroupEvent(String groupId, String groupSubject) {
+        Log.i("sendLeaveGroupEvent", "groupId = " + groupId + ", groupSubject = " + groupSubject);
+        WritableMap map = Arguments.createMap();
+        WritableMap group = Arguments.createMap();
+        group.putString("groupId", groupId);
+        map.putMap("group", group);
+        map.putInt("reason", EMAGroup.EMGroupLeaveReason.BE_KICKED.ordinal());
+        EasemobHelper.getInstance().sendEvent(IMConstant.GROUP_MANAGER_DELEGATE, IMConstant.DID_LEAVE_GROUP, map);
+
+    }
+
+    @Override
+    public void onGroupDestroyed(String s, String s1) {
+        sendLeaveGroupEvent(s, s1);
+    }
+
+    @Override
+    public void onAutoAcceptInvitationFromGroup(String s, String s1, String s2) {
+
+    }
+
+    @Override
+    public void onMuteListAdded(String s, List<String> list, long l) {
+
+    }
+
+    @Override
+    public void onMuteListRemoved(String s, List<String> list) {
+
+    }
+
+    @Override
+    public void onWhiteListAdded(String groupId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+
+    }
+
+    @Override
+    public void onAdminAdded(String s, String s1) {
+
+    }
+
+    @Override
+    public void onAdminRemoved(String s, String s1) {
+
+    }
+
+    @Override
+    public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
+        WritableMap map = Arguments.createMap();
+        map.putString("groupId", groupId);
+        map.putString("newOwner", newOwner);
+        map.putString("oldOwner", oldOwner);
+        EasemobHelper.getInstance().sendEvent(IMConstant.GROUP_MANAGER_DELEGATE, IMConstant. GROUP_OWNER_DID_UPDATE, map);
+    }
+
+    @Override
+    public void onMemberJoined(String groupId, String member) {
+        WritableMap map = Arguments.createMap();
+        map.putString("groupId", groupId);
+        map.putString("username", member);
+        EasemobHelper.getInstance().sendEvent(IMConstant.GROUP_MANAGER_DELEGATE, IMConstant.USER_DID_JOIN_GROUP, map);
+    }
+
+    @Override
+    public void onMemberExited(String groupId, String member) {
+        WritableMap map = Arguments.createMap();
+        map.putString("groupId", groupId);
+        map.putString("username", member);
+        EasemobHelper.getInstance().sendEvent(IMConstant.GROUP_MANAGER_DELEGATE, IMConstant. USER_DID_LEAVE_GROUP, map);
+    }
+
+    @Override
+    public void onAnnouncementChanged(String s, String s1) {
+
+    }
+
+    @Override
+    public void onSharedFileAdded(String s, EMMucSharedFile emMucSharedFile) {
+
+    }
+
+    @Override
+    public void onSharedFileDeleted(String s, String s1) {
+
+    }
+
+    /******************** MessageListener ********************/
+
+    @Override
+    public void onMessageReceived(List<EMMessage> list) {
+        EasemobHelper.getInstance().sendEvent(IMConstant.CHAT_MANAGER_DELEGATE, IMConstant.MESSAGE_DID_RECEIVE, EasemobConverter
+                .convertList(list));
+    }
+
+    @Override
+    public void onCmdMessageReceived(List<EMMessage> list) {
+        EasemobHelper.getInstance()
+                .sendEvent(IMConstant.CHAT_MANAGER_DELEGATE, IMConstant. CMD_MESSAGE_DID_RECEIVE, EasemobConverter
+                        .convertList(list));
+    }
+
+    @Override
+    public void onMessageRead(List<EMMessage> list) {
+
+    }
+
+    @Override
+    public void onMessageDelivered(List<EMMessage> list) {
+    }
+
+    @Override
+    public void onMessageRecalled(List<EMMessage> list) {
+
+    }
+
+    @Override
+    public void onMessageChanged(EMMessage emMessage, Object o) {
+
+    }
+
+    @Override
+    public void onMigrate2x(boolean b) {
+
+    }
+
+    @Override
+    public void onContactAdded(String s) {
+
+    }
+
+    @Override
+    public void onContactDeleted(String s) {
+
+    }
+
+    @Override
+    public void onContactInvited(String s, String s1) {
+
+    }
+
+    @Override
+    public void onFriendRequestAccepted(String s) {
+
+    }
+
+    @Override
+    public void onFriendRequestDeclined(String s) {
+
+    }
+
+    @Override
+    public void onContactEvent(int i, String s, String s1) {
+
+    }
+
+    @Override
+    public void onGroupEvent(int i, String s, List<String> list) {
+
+    }
+}
