@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-house-im.git",
-    "baseUrl": "https://github.com/github_account/react-native-house-im"
+    "url": "https://github.com/lvi166/react-native-house-im.git",
+    "baseUrl": "https://github.com/lvi166/react-native-house-im"
   },
   "keywords": [
-    "react-native"
+    "react-native react-native-houseim"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "yourname@email.com"
+    "name": "lvi166",
+    "email": "lvi166lvi@email.com"
   },
   "license": "MIT",
   "licenseFilename": "LICENSE",
