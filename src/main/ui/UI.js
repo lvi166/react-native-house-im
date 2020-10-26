@@ -14,7 +14,7 @@ const listeners = {};
 const IMUIMessageListDidLoad = "IMUIMessageListDidLoad";
 const GET_INPUT_TEXT_EVENT = "getInputText";
 
-class AuroraIMUIController {
+export  class AuroraIMUIController {
 	/**
 	 * append messages into messageList's bottom
 	 * 
@@ -153,17 +153,3 @@ class AuroraIMUIController {
 }
 
 
-
-
-// export { 
-//   AuroraIMUI, 
-//   Avatar, 
-//   Event, 
-//   MessageList,
-//   Message,
-//   MessageTime, 
-//   MessageState,
-//   InputItem, 
-//   InputView, 
-//   UserName,
-// }

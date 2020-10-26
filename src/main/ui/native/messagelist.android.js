@@ -1,23 +1,22 @@
 'use strict';
 
 import React from 'react';
-import ReactNative from 'react-native';
-import {ViewPropTypes} from 'react-native';
-import PropTypes from 'prop-types';
 
-var {
-  Component,
-} = React;
-
-var {
+import {
   StyleSheet,
   UIManager,
   findNodeHandle,
   requireNativeComponent,
-} = ReactNative;
+} from "react-native";
+
+import {ViewPropTypes} from 'react-native';
+import PropTypes from 'prop-types';
+
+
+
 const PTR_LAYOUT = "ptr_layout";
 
-export default class MessageList extends Component {
+export default class MessageList extends React.Component {
 
   constructor(props) {
     super(props);

@@ -120,6 +120,7 @@ public class ChatManager extends ReactContextBaseJavaModule {
 
         } catch (Exception e) {
             e.printStackTrace();
+            promise.reject(e);
         }
 
 

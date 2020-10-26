@@ -1,26 +1,23 @@
 'use strict';
 
 import React from 'react';
-import ReactNative from 'react-native';
+
 import PropTypes from 'prop-types';
 import {ViewPropTypes} from 'react-native';
 
-var {
-	Component,
-} = React;
 
-var {
+import {
 	StyleSheet,
 	View,
 	Dimensions,
 	requireNativeComponent,
 	UIManager,
 	findNodeHandle,
-  } = ReactNative;
+  } from"react-native";
 
 const CHAT_INPUT = "chat_input";
 
-export default class ChatInput extends Component {
+export default class ChatInput extends React.Component {
 
 	constructor(props) {
 		super(props);

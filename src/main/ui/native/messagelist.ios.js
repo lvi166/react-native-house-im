@@ -5,16 +5,17 @@ import ReactNative from 'react-native';
 import PropTypes from 'prop-types';
 import {ViewPropTypes} from 'react-native';
 
-var {
-  Component,
-} = React;
 
-var {
+
+import {
   StyleSheet,
+  UIManager,
+  findNodeHandle,
   requireNativeComponent,
-} = ReactNative;
+} from "react-native";
 
-export default class MessageList extends Component {
+
+export default class MessageList extends React.Component {
 
   constructor(props) {
     super(props);

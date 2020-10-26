@@ -1,11 +1,15 @@
 
 
-
 import * as AuroraIMUIController from "./src/main/ui/UI"
 import * as UICommon from "./src/main/ui/Common"
 
-import * as ChatInput from './src/main/ui/native/chatinput.android';
-import * as MessageList from './src/main/ui/native/messagelist.android';
+// import * as ChatInput from './src/main/ui/native/chatinput.android';
+// import  { MessageList } from './src/main/ui/native/messagelist.android';
+
+
+import MessageList from "react-native-house-im/src/main/ui/native/messagelist";
+import ChatInput from "react-native-house-im/src/main/ui/native/chatinput";
+
 import * as PhotoBrowserView from './src/main/ui/native/photo_browser.android';
 
 
@@ -18,6 +22,7 @@ import * as IMConstant  from './src/main/im/constant/IMConstant';
 import * as EventEmitter from './src/main/im/eventemitter';
 
 
+
 export {
     EventEmitter,
     APNs,
@@ -27,8 +32,17 @@ export {
     IMConstant,
     AuroraIMUIController,
     UICommon,
-    ChatInput,
-    MessageList,
+   
+    // MessageList,
     PhotoBrowserView,
 
 };
+
+export {
+    MessageList,
+  
+}
+export {
+    ChatInput,
+  
+}
