@@ -4,9 +4,9 @@
 import * as AuroraIMUIController from "./src/main/ui/UI"
 import * as UICommon from "./src/main/ui/Common"
 
-import * as ChatInput from './src/main/ui/native/chatinput';
-import * as MessageList from './src/main/ui/native/messagelist';
-import * as PhotoBrowserView from './src/main/ui/native/photo_browser';
+import * as ChatInput from './src/main/ui/native/chatinput.android';
+import * as MessageList from './src/main/ui/native/messagelist.android';
+import * as PhotoBrowserView from './src/main/ui/native/photo_browser.android';
 
 
 //-- im core
